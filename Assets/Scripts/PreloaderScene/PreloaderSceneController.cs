@@ -15,7 +15,7 @@ namespace PreloaderScene
 			await _levelsProvider.Initialize();
 			// TODO: Any other initialize actions here
 
-			_sceneLoader.LoadSceneAsync(Const.StartSceneName);
+			await _sceneLoader.LoadSceneAsync(Const.StartSceneName);
 		}
 	}
 }

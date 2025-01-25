@@ -25,14 +25,24 @@ namespace EditorScene
 			_graphView.AddBase();
 		}
 
+		public void OnAddNode()
+		{
+			_graphView.AddNode();
+		}
+
 		public void OnAddConnection()
 		{
 			_graphView.AddConnection();
 		}
 
-		public void OnRemoveConnection()
+		public void OnRemove()
 		{
-			_graphView.RemoveConnection();
+			_graphView.RemoveSelected();
+		}
+
+		public void OnManageTrains()
+		{
+			throw new NotImplementedException();
 		}
 
 		public void OnSave()

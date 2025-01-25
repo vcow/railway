@@ -1,3 +1,4 @@
+using EditorScene.Signals;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +9,15 @@ namespace EditorScene
 	{
 		public override void InstallBindings()
 		{
+			Container.DeclareSignal<SelectMarkerSignal>();
+			Container.DeclareSignal<DragMarkerSignal>();
+			Container.DeclareSignal<ChangeMarkerMultiplierSignal>();
+			Container.DeclareSignal<MoveMarkerSignal>();
+			Container.DeclareSignal<RenameMarkerSignal>();
+			Container.DeclareSignal<SelectConnectionSignal>();
+			Container.DeclareSignal<MarkForConnectionSignal>();
+			Container.DeclareSignal<RemoveMarkerSignal>();
+			Container.DeclareSignal<RemoveConnectionSignal>();
 		}
 	}
 }
