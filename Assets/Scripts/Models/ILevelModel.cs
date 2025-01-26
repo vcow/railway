@@ -21,6 +21,7 @@ namespace Models
 
 	public interface IConnectionModel
 	{
+		float Length { get; }
 		int FromNodeId { get; }
 		int ToNodeId { get; }
 	}

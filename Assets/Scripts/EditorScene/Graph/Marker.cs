@@ -1,4 +1,5 @@
 using EditorScene.Signals;
+using Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -19,21 +20,40 @@ namespace EditorScene.Graph
 		[Inject] protected readonly SignalBus _signalBus;
 		[Inject] private readonly float _connectionLenMultiplier;
 
+		// ReSharper disable once InconsistentNaming
+		[InjectOptional] protected readonly INodeModel _nodeModel;
+
 		private RectTransform _rectTransform;
 		private bool _markedForConnection;
 
 		private static int _idCtr;
+		private static int _restoredIdCtr;
+
+		private readonly int _defaultId = _restoredIdCtr > _idCtr ? _restoredIdCtr++ : _idCtr++;
 
 		private void Awake()
 		{
+			if (_nodeModel != null)
+			{
+				_restoredIdCtr = Mathf.Max(_restoredIdCtr, _nodeModel.Id);
+			}
+
 			_rectTransform = (RectTransform)transform;
 		}
 
 		protected virtual void Start()
 		{
-			MarkerName = GenerateDefaultName();
-
 			_selector.color = _selectorColor;
+
+			if (_nodeModel != null)
+			{
+				_rectTransform.anchoredPosition = new Vector2(_nodeModel.XPos, _nodeModel.YPos) / _connectionLenMultiplier;
+				MarkerName = _nodeModel.Name;
+			}
+			else
+			{
+				MarkerName = GenerateDefaultName();
+			}
 
 			_signalBus.Subscribe<SelectMarkerSignal>(OnSelectMarker);
 			_signalBus.Subscribe<MoveMarkerSignal>(OnMoveMarker);
@@ -108,10 +128,10 @@ namespace EditorScene.Graph
 			_signalBus.TryFire(new DragMarkerSignal(this));
 		}
 
-		public int Id { get; } = _idCtr++;
+		public int Id => _nodeModel?.Id ?? _defaultId;
 
 		public Vector2 Position => _rectTransform.anchoredPosition * _connectionLenMultiplier;
 
-		public string MarkerName { get; private set; }
+		public string MarkerName { get; protected set; }
 	}
 }

@@ -1,5 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
+using EditorScene.Builders;
 using EditorScene.Signals;
+using Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
@@ -19,6 +22,7 @@ namespace EditorScene.Graph
 
 		[Inject] private readonly DiContainer _container;
 		[Inject] private readonly SignalBus _signalBus;
+		[Inject] private readonly LevelModelBuilder _levelModelBuilder;
 
 		private Marker _selectedMarker;
 		private NodeConnection _selectedConnection;
@@ -33,12 +37,48 @@ namespace EditorScene.Graph
 		{
 			_signalBus.Subscribe<SelectMarkerSignal>(OnSelectMarker);
 			_signalBus.Subscribe<SelectConnectionSignal>(OnSelectConnection);
+
+			RestoreLevel(_levelModelBuilder.LevelModel);
 		}
 
 		private void OnDestroy()
 		{
 			_signalBus.Unsubscribe<SelectMarkerSignal>(OnSelectMarker);
 			_signalBus.Unsubscribe<SelectConnectionSignal>(OnSelectConnection);
+		}
+
+		private void RestoreLevel(ILevelModel levelModel)
+		{
+			foreach (var nodeModel in levelModel.Nodes)
+			{
+				switch (nodeModel.Type)
+				{
+					case NodeType.Node:
+						AddNode(nodeModel);
+						break;
+					case NodeType.Mine:
+						AddMine(nodeModel);
+						break;
+					case NodeType.Base:
+						AddBase(nodeModel);
+						break;
+					default:
+						throw new NotSupportedException();
+				}
+			}
+
+			foreach (var connectionModel in levelModel.Connections)
+			{
+				var from = FindMarker(connectionModel.FromNodeId);
+				var to = FindMarker(connectionModel.ToNodeId);
+				if (!from || !to)
+				{
+					Debug.LogError($"Can't restore connection {connectionModel.FromNodeId}-{connectionModel.ToNodeId}.");
+					continue;
+				}
+
+				CreateConnection(from, to, connectionModel.Length);
+			}
 		}
 
 		private async void OnSelectMarker(SelectMarkerSignal signal)
@@ -61,15 +101,40 @@ namespace EditorScene.Graph
 				return;
 			}
 
-			var from = _selectedMarker;
-			var to = signal.Marker;
-			var connection = _container.InstantiatePrefabForComponent<NodeConnection>(_nodeConnectionPrefab, _connectionsLayer,
-				new object[] { (from, to), _connectionLenMultiplier });
-			connection.gameObject.name = $"connection_{from.Id}-{to.Id}";
+			var connection = CreateConnection(_selectedMarker, signal.Marker, null);
 
 			await UniTask.Yield(PlayerLoopTiming.Update);
 
 			_signalBus.TryFire(new SelectConnectionSignal(connection));
+		}
+
+		private NodeConnection CreateConnection(Marker from, Marker to, float? length)
+		{
+			var connection = _container.InstantiatePrefabForComponent<NodeConnection>(_nodeConnectionPrefab, _connectionsLayer,
+				length.HasValue
+					? new object[] { (from, to), _connectionLenMultiplier, length }
+					: new object[] { (from, to), _connectionLenMultiplier });
+			connection.gameObject.name = $"connection_{from.Id}-{to.Id}";
+			return connection;
+		}
+
+		private Marker FindMarker(int id)
+		{
+			foreach (Transform child in _markersLayer)
+			{
+				var marker = child.GetComponent<Marker>();
+				if (!marker)
+				{
+					continue;
+				}
+
+				if (marker.Id == id)
+				{
+					return marker;
+				}
+			}
+
+			return null;
 		}
 
 		private void OnSelectConnection(SelectConnectionSignal signal)
@@ -81,31 +146,52 @@ namespace EditorScene.Graph
 			}
 		}
 
-		public void AddMine()
+		public void AddMine(INodeModel nodeModel = null)
 		{
+			Assert.IsTrue(nodeModel == null || nodeModel.Type == NodeType.Mine);
+
 			_isConnection = false;
 			var marker = _container.InstantiatePrefabForComponent<Marker>(_mineMarkerPrefab, _markersLayer,
-				new object[] { _connectionLenMultiplier });
+				nodeModel != null
+					? new object[] { _connectionLenMultiplier, nodeModel }
+					: new object[] { _connectionLenMultiplier });
 			marker.gameObject.name = $"mine_{marker.Id}";
-			marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
+			if (nodeModel == null)
+			{
+				marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
+			}
 		}
 
-		public void AddBase()
+		public void AddBase(INodeModel nodeModel = null)
 		{
+			Assert.IsTrue(nodeModel == null || nodeModel.Type == NodeType.Base);
+
 			_isConnection = false;
 			var marker = _container.InstantiatePrefabForComponent<Marker>(_baseMarkerPrefab, _markersLayer,
-				new object[] { _connectionLenMultiplier });
+				nodeModel != null
+					? new object[] { _connectionLenMultiplier, nodeModel }
+					: new object[] { _connectionLenMultiplier });
 			marker.gameObject.name = $"base_{marker.Id}";
-			marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
+			if (nodeModel == null)
+			{
+				marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
+			}
 		}
 
-		public void AddNode()
+		public void AddNode(INodeModel nodeModel = null)
 		{
+			Assert.IsTrue(nodeModel == null || nodeModel.Type == NodeType.Node);
+
 			_isConnection = false;
 			var marker = _container.InstantiatePrefabForComponent<Marker>(_nodeMarkerPrefab, _markersLayer,
-				new object[] { _connectionLenMultiplier });
+				nodeModel != null
+					? new object[] { _connectionLenMultiplier, nodeModel }
+					: new object[] { _connectionLenMultiplier });
 			marker.gameObject.name = $"node_{marker.Id}";
-			marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
+			if (nodeModel == null)
+			{
+				marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
+			}
 		}
 
 		public void AddConnection()
@@ -125,13 +211,12 @@ namespace EditorScene.Graph
 			{
 				_isConnection = false;
 				Destroy(_selectedMarker.gameObject);
-				_selectedMarker = null;
+				_signalBus.TryFire(new SelectMarkerSignal(null));
 			}
-
-			if (_selectedConnection != null)
+			else if (_selectedConnection != null)
 			{
 				Destroy(_selectedConnection.gameObject);
-				_selectedConnection = null;
+				_signalBus.TryFire(new SelectConnectionSignal(null));
 			}
 		}
 

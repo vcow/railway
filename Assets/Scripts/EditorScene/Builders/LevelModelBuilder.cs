@@ -38,7 +38,7 @@ namespace EditorScene.Builders
 			_signalBus.Subscribe<SetLevelNameSignal>(OnSetLevelName);
 			_signalBus.Subscribe<RenameMarkerSignal>(OnRenameMarker);
 			_signalBus.Subscribe<RemoveMarkerSignal>(OnRemoveMarkerSignal);
-			_signalBus.Subscribe<ConnectionChangedSignal>(OnConnectionChanged);
+			_signalBus.Subscribe<SetConnectionLengthSignal>(OnSetConnectionLength);
 			_signalBus.Subscribe<RemoveConnectionSignal>(OnRemoveConnection);
 			_signalBus.Subscribe<MoveMarkerSignal>(OnMoveMarker);
 			_signalBus.Subscribe<DragMarkerSignal>(OnDragMarker);
@@ -52,7 +52,7 @@ namespace EditorScene.Builders
 			_signalBus.Unsubscribe<SetLevelNameSignal>(OnSetLevelName);
 			_signalBus.Unsubscribe<RenameMarkerSignal>(OnRenameMarker);
 			_signalBus.Unsubscribe<RemoveMarkerSignal>(OnRemoveMarkerSignal);
-			_signalBus.Unsubscribe<ConnectionChangedSignal>(OnConnectionChanged);
+			_signalBus.Unsubscribe<SetConnectionLengthSignal>(OnSetConnectionLength);
 			_signalBus.Unsubscribe<RemoveConnectionSignal>(OnRemoveConnection);
 			_signalBus.Unsubscribe<MoveMarkerSignal>(OnMoveMarker);
 			_signalBus.Unsubscribe<DragMarkerSignal>(OnDragMarker);
@@ -90,9 +90,10 @@ namespace EditorScene.Builders
 			_levelModel.Nodes.Remove(record);
 		}
 
-		private void OnConnectionChanged(ConnectionChangedSignal signal)
+		private void OnSetConnectionLength(SetConnectionLengthSignal signal)
 		{
-			GetOrCreateConnectionRecord(signal.NodeConnection);
+			var record = GetOrCreateConnectionRecord(signal.NodeConnection);
+			record.Length = signal.Length;
 		}
 
 		private void OnRemoveConnection(RemoveConnectionSignal signal)
@@ -161,6 +162,7 @@ namespace EditorScene.Builders
 			{
 				record = new LevelModelImpl.ConnectionRecord
 				{
+					Length = connection.Length,
 					FromNodeId = connection.From.Id,
 					ToNodeId = connection.To.Id
 				};

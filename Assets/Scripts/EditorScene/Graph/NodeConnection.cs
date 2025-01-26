@@ -1,4 +1,3 @@
-using System.Globalization;
 using Cysharp.Threading.Tasks;
 using EditorScene.Signals;
 using TMPro;
@@ -21,6 +20,7 @@ namespace EditorScene.Graph
 		[Inject] private readonly SignalBus _signalBus;
 		[Inject] private readonly (Marker from, Marker to) _connectedMarkers;
 		[Inject] private readonly float _connectionLenMultiplier;
+		[InjectOptional] private readonly float? _length;
 
 		private void Start()
 		{
@@ -29,8 +29,11 @@ namespace EditorScene.Graph
 			_signalBus.Subscribe<MoveMarkerSignal>(OnMoveMarker);
 			_signalBus.Subscribe<RemoveMarkerSignal>(OnRemoveMarker);
 			_signalBus.Subscribe<SetConnectionLengthSignal>(OnSetConnectionLength);
+			_signalBus.Subscribe<SetConnectionDistanceSignal>(OnSetConnectionDistance);
 
 			UpdateConnection();
+
+			_signalBus.TryFire(new SetConnectionLengthSignal(this, _length ?? Distance));
 		}
 
 		private void OnDestroy()
@@ -40,6 +43,7 @@ namespace EditorScene.Graph
 			_signalBus.Unsubscribe<MoveMarkerSignal>(OnMoveMarker);
 			_signalBus.Unsubscribe<RemoveMarkerSignal>(OnRemoveMarker);
 			_signalBus.Unsubscribe<SetConnectionLengthSignal>(OnSetConnectionLength);
+			_signalBus.Unsubscribe<SetConnectionDistanceSignal>(OnSetConnectionDistance);
 
 			_signalBus.TryFire(new RemoveConnectionSignal(this));
 		}
@@ -88,11 +92,22 @@ namespace EditorScene.Graph
 				return;
 			}
 
+			Length = signal.Length;
+			_lengthLabel.text = $"({Distance}) {Length}";
+		}
+
+		private void OnSetConnectionDistance(SetConnectionDistanceSignal signal)
+		{
+			if (signal.NodeConnection != this)
+			{
+				return;
+			}
+
 			var fromPosition = _connectedMarkers.from.Position;
 			var toPosition = _connectedMarkers.to.Position;
 			var delta = toPosition - fromPosition;
 			var ang = Mathf.Atan2(delta.y, delta.x);
-			var relToPositionMarker = new Vector2(Mathf.Cos(ang) * signal.Length, Mathf.Sin(ang) * signal.Length);
+			var relToPositionMarker = new Vector2(Mathf.Cos(ang) * signal.Distance, Mathf.Sin(ang) * signal.Distance);
 			_signalBus.TryFire(new MoveMarkerSignal(_connectedMarkers.to, fromPosition + relToPositionMarker));
 		}
 
@@ -125,8 +140,8 @@ namespace EditorScene.Graph
 			var ang = Mathf.Atan2(delta.y, delta.x);
 			_line.transform.rotation = Quaternion.Euler(0f, 0f, ang * Mathf.Rad2Deg);
 
-			Length = Mathf.Round(len);
-			_lengthLabel.text = Length.ToString(CultureInfo.InvariantCulture);
+			Distance = Mathf.Round(len);
+			_lengthLabel.text = $"({Distance}) {Length}";
 			_signalBus.TryFire(new ConnectionChangedSignal(this));
 		}
 
@@ -137,6 +152,8 @@ namespace EditorScene.Graph
 		}
 
 		public float Length { get; private set; }
+
+		public float Distance { get; private set; }
 
 		public Marker From => _connectedMarkers.from;
 

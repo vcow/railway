@@ -11,11 +11,13 @@ namespace EditorScene.Graph
 
 		protected override string GenerateDefaultName() => $"mine_{Id}";
 
-		public float Multiplier { get; private set; } = 1f;
+		public float Multiplier { get; private set; }
 
 		protected override void Start()
 		{
 			base.Start();
+
+			Multiplier = _nodeModel?.Multiplier ?? 1f;
 
 			_nameLabel.text = MarkerName;
 			_signalBus.Subscribe<RenameMarkerSignal>(OnRenameMarker);
@@ -38,11 +40,22 @@ namespace EditorScene.Graph
 
 		private void OnRenameMarker(RenameMarkerSignal signal)
 		{
+			if (signal.Marker != this)
+			{
+				return;
+			}
+
+			MarkerName = signal.NewName;
 			_nameLabel.text = signal.NewName;
 		}
 
 		private void OnChangeMultiplier(ChangeMarkerMultiplierSignal signal)
 		{
+			if (signal.Marker != this)
+			{
+				return;
+			}
+
 			Multiplier = signal.NewMultiplier;
 		}
 	}

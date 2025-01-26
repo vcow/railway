@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -22,6 +23,27 @@ namespace Models
 		public LevelModelImpl(ILevelModel initialLevelModel)
 		{
 			Name = initialLevelModel.Name;
+			Nodes.AddRange(initialLevelModel.Nodes.Select(model => new NodeRecord
+			{
+				Id = model.Id,
+				Multiplier = model.Multiplier,
+				Name = model.Name,
+				Type = model.Type,
+				XPos = model.XPos,
+				YPos = model.YPos
+			}));
+			Connections.AddRange(initialLevelModel.Connections.Select(model => new ConnectionRecord
+			{
+				Length = model.Length,
+				FromNodeId = model.FromNodeId,
+				ToNodeId = model.ToNodeId
+			}));
+			Trains.AddRange(initialLevelModel.Trains.Select(model => new TrainModelImpl
+			{
+				Name = model.Name,
+				Speed = model.Speed,
+				Mining = model.Mining
+			}));
 		}
 
 		public class NodeRecord : INodeModel
@@ -36,6 +58,7 @@ namespace Models
 
 		public class ConnectionRecord : IConnectionModel
 		{
+			[JsonProperty(PropertyName = "length")] public float Length { get; set; }
 			[JsonProperty(PropertyName = "from")] public int FromNodeId { get; set; }
 			[JsonProperty(PropertyName = "to")] public int ToNodeId { get; set; }
 		}

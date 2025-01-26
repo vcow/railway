@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Models;
 using Settings;
 using TMPro;
 using UnityEngine;
@@ -29,7 +30,15 @@ namespace StartScene
 
 		public void OnEditLevel()
 		{
-			throw new NotImplementedException();
+			if (_selectLevelDropdown.value < 0)
+			{
+				OnNewLevel();
+				return;
+			}
+
+			var level = _levelsProvider.Levels[_selectLevelDropdown.value];
+			_sceneLoader.LoadSceneAsync(Const.EditorSceneName,
+				extraBindings: container => container.Bind<ILevelModel>().FromInstance(level).AsSingle());
 		}
 
 		public void OnNewLevel()

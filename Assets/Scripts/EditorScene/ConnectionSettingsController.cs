@@ -12,6 +12,7 @@ namespace EditorScene
 	public sealed class ConnectionSettingsController : MonoBehaviour
 	{
 		[SerializeField] private TMP_InputField _lengthInput;
+		[SerializeField] private TMP_InputField _distanceInput;
 
 		[Inject] private readonly SignalBus _signalBus;
 
@@ -22,6 +23,8 @@ namespace EditorScene
 			_signalBus.Subscribe<ConnectionChangedSignal>(OnConnectionChanged);
 			_signalBus.Subscribe<SelectConnectionSignal>(OnSelectConnection);
 
+			_lengthInput.onValueChanged.AddListener(OnChangeLength);
+
 			gameObject.SetActive(false);
 		}
 
@@ -29,22 +32,34 @@ namespace EditorScene
 		{
 			_signalBus.Unsubscribe<ConnectionChangedSignal>(OnConnectionChanged);
 			_signalBus.Unsubscribe<SelectConnectionSignal>(OnSelectConnection);
+
+			_lengthInput.onValueChanged.RemoveListener(OnChangeLength);
+		}
+
+		private void OnChangeLength(string value)
+		{
+			if (_selectedConnection == null)
+			{
+				return;
+			}
+
+			_signalBus.TryFire(new SetConnectionLengthSignal(_selectedConnection, value.ToFloat()));
 		}
 
 		public void OnApply()
 		{
-			var newValue = _lengthInput.text.ToFloat();
+			var newValue = _distanceInput.text.ToFloat();
 			if (_selectedConnection == null || _selectedConnection.Length.Equals(newValue))
 			{
 				return;
 			}
 
-			_signalBus.TryFire(new SetConnectionLengthSignal(_selectedConnection, newValue));
+			_signalBus.TryFire(new SetConnectionDistanceSignal(_selectedConnection, newValue));
 		}
 
 		private void OnConnectionChanged(ConnectionChangedSignal signal)
 		{
-			_lengthInput.text = signal.NodeConnection.Length.ToString(CultureInfo.InvariantCulture);
+			_distanceInput.text = signal.NodeConnection.Distance.ToString(CultureInfo.InvariantCulture);
 		}
 
 		private void OnSelectConnection(SelectConnectionSignal signal)
@@ -56,6 +71,7 @@ namespace EditorScene
 				return;
 			}
 
+			_distanceInput.text = _selectedConnection.Distance.ToString(CultureInfo.InvariantCulture);
 			_lengthInput.text = _selectedConnection.Length.ToString(CultureInfo.InvariantCulture);
 			gameObject.SetActive(true);
 		}

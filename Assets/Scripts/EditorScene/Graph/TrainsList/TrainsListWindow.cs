@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EditorScene.Builders;
 using EditorScene.Signals;
 using Models;
 using TMPro;
@@ -22,8 +23,17 @@ namespace EditorScene.Graph.TrainsList
 
 		[Inject] private readonly DiContainer _container;
 		[Inject] private readonly SignalBus _signalBus;
+		[Inject] private readonly LevelModelBuilder _levelModelBuilder;
 
 		private TrainsListItem _selectedItem;
+
+		private void Start()
+		{
+			foreach (var trainModel in _levelModelBuilder.LevelModel.Trains)
+			{
+				AddItem(trainModel.Name, trainModel.Speed, trainModel.Mining);
+			}
+		}
 
 		public void OnAdd()
 		{
@@ -34,12 +44,17 @@ namespace EditorScene.Graph.TrainsList
 				return;
 			}
 
+			AddItem(_nameInput.text, speed, mining);
+		}
+
+		private void AddItem(string trainName, float speed, float mining)
+		{
 			var index = _listContainer.childCount;
 			var item = _container.InstantiatePrefabForComponent<TrainsListItem>(_listItemPrefab, _listContainer,
 				new object[]
 				{
 					index,
-					_nameInput.text,
+					trainName,
 					(speed, mining)
 				});
 			item.Toggle.group = _toggleGroup;

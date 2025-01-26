@@ -25,6 +25,7 @@ namespace EditorScene
 			Container.DeclareSignal<SetConnectionLengthSignal>();
 			Container.DeclareSignal<SetLevelNameSignal>();
 			Container.DeclareSignal<TrainsListChangedSignal>();
+			Container.DeclareSignal<SetConnectionDistanceSignal>();
 		}
 	}
 }
