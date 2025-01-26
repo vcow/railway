@@ -2,7 +2,7 @@ using EditorScene.Graph;
 
 namespace EditorScene.Signals
 {
-	public class RemoveConnectionSignal
+	public sealed class RemoveConnectionSignal
 	{
 		public NodeConnection NodeConnection { get; }
 

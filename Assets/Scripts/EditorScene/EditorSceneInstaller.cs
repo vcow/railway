@@ -18,6 +18,8 @@ namespace EditorScene
 			Container.DeclareSignal<MarkForConnectionSignal>();
 			Container.DeclareSignal<RemoveMarkerSignal>();
 			Container.DeclareSignal<RemoveConnectionSignal>();
+			Container.DeclareSignal<ConnectionChangedSignal>();
+			Container.DeclareSignal<SetConnectionLengthSignal>();
 		}
 	}
 }

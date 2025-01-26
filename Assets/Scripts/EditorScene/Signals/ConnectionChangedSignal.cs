@@ -2,11 +2,11 @@ using EditorScene.Graph;
 
 namespace EditorScene.Signals
 {
-	public sealed class SelectConnectionSignal
+	public sealed class ConnectionChangedSignal
 	{
 		public NodeConnection NodeConnection { get; }
 
-		public SelectConnectionSignal(NodeConnection nodeConnection)
+		public ConnectionChangedSignal(NodeConnection nodeConnection)
 		{
 			NodeConnection = nodeConnection;
 		}

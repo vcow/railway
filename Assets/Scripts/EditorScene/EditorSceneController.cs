@@ -40,11 +40,6 @@ namespace EditorScene
 			_graphView.RemoveSelected();
 		}
 
-		public void OnManageTrains()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void OnSave()
 		{
 			throw new NotImplementedException();

@@ -2,7 +2,7 @@ using EditorScene.Graph;
 
 namespace EditorScene.Signals
 {
-	public class MarkForConnectionSignal
+	public sealed class MarkForConnectionSignal
 	{
 		public Marker Marker { get; }
 

@@ -2,7 +2,7 @@ using EditorScene.Graph;
 
 namespace EditorScene.Signals
 {
-	public class RenameMarkerSignal
+	public sealed class RenameMarkerSignal
 	{
 		public Marker Marker { get; }
 		public string NewName { get; }

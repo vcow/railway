@@ -2,7 +2,7 @@ using EditorScene.Graph;
 
 namespace EditorScene.Signals
 {
-	public class RemoveMarkerSignal
+	public sealed class RemoveMarkerSignal
 	{
 		public Marker Marker { get; }
 

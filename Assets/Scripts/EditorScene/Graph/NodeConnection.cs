@@ -28,6 +28,7 @@ namespace EditorScene.Graph
 			_signalBus.Subscribe<DragMarkerSignal>(OnDragMarker);
 			_signalBus.Subscribe<MoveMarkerSignal>(OnMoveMarker);
 			_signalBus.Subscribe<RemoveMarkerSignal>(OnRemoveMarker);
+			_signalBus.Subscribe<SetConnectionLengthSignal>(OnSetConnectionLength);
 
 			UpdateConnection();
 		}
@@ -38,6 +39,7 @@ namespace EditorScene.Graph
 			_signalBus.Unsubscribe<DragMarkerSignal>(OnDragMarker);
 			_signalBus.Unsubscribe<MoveMarkerSignal>(OnMoveMarker);
 			_signalBus.Unsubscribe<RemoveMarkerSignal>(OnRemoveMarker);
+			_signalBus.Unsubscribe<SetConnectionLengthSignal>(OnSetConnectionLength);
 
 			_signalBus.TryFire(new RemoveConnectionSignal(this));
 		}
@@ -79,6 +81,22 @@ namespace EditorScene.Graph
 			Destroy(gameObject);
 		}
 
+		private void OnSetConnectionLength(SetConnectionLengthSignal signal)
+		{
+			if (signal.NodeConnection != this)
+			{
+				return;
+			}
+
+			var fromPosition = _connectedMarkers.from.Position;
+			var toPosition = _connectedMarkers.to.Position;
+			var delta = toPosition - fromPosition;
+			var ang = Mathf.Atan2(delta.y, delta.x);
+			var actualLength = signal.Length / _connectionLenMultiplier;
+			var relToPositionMarker = new Vector2(Mathf.Cos(ang) * actualLength, Mathf.Sin(ang) * actualLength);
+			_signalBus.TryFire(new MoveMarkerSignal(_connectedMarkers.to, _connectedMarkers.from.Position + relToPositionMarker));
+		}
+
 		public void OnPointerClick(BaseEventData eventData)
 		{
 			_signalBus.TryFire(new SelectConnectionSignal(this));
@@ -108,8 +126,9 @@ namespace EditorScene.Graph
 			var ang = Mathf.Atan2(delta.y, delta.x);
 			_line.transform.rotation = Quaternion.Euler(0f, 0f, ang * Mathf.Rad2Deg);
 
-			len = Mathf.Round(len * _connectionLenMultiplier);
-			_lengthLabel.text = len.ToString(CultureInfo.InvariantCulture);
+			Length = Mathf.Round(len * _connectionLenMultiplier);
+			_lengthLabel.text = Length.ToString(CultureInfo.InvariantCulture);
+			_signalBus.TryFire(new ConnectionChangedSignal(this));
 		}
 
 		private void OnValidate()
@@ -117,5 +136,7 @@ namespace EditorScene.Graph
 			Assert.IsNotNull(_line, "_line != null");
 			Assert.IsNotNull(_lengthLabel, "_lengthLabel != null");
 		}
+
+		public float Length { get; private set; }
 	}
 }

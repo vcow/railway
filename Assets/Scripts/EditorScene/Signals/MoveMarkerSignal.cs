@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EditorScene.Signals
 {
-	public class MoveMarkerSignal
+	public sealed class MoveMarkerSignal
 	{
 		public Marker Marker { get; }
 		public Vector2 NewPosition { get; }

@@ -2,7 +2,7 @@ using EditorScene.Graph;
 
 namespace EditorScene.Signals
 {
-	public class SelectMarkerSignal
+	public sealed class SelectMarkerSignal
 	{
 		public Marker Marker { get; }
 

@@ -38,6 +38,9 @@ namespace EditorScene
 
 		private void OnDestroy()
 		{
+			_signalBus.Unsubscribe<SelectMarkerSignal>(OnSelectMarker);
+			_signalBus.Unsubscribe<DragMarkerSignal>(OnDragMarker);
+
 			_xInput.onValueChanged.RemoveListener(OnChangeXPosition);
 			_yInput.onValueChanged.RemoveListener(OnChangeYPosition);
 			_nameInput.onValueChanged.RemoveListener(OnChangeName);
