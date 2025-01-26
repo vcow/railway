@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using EditorScene.Signals;
+using Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +21,7 @@ namespace EditorScene.Graph.TrainsList
 		[SerializeField] private TMP_InputField _miningInput;
 
 		[Inject] private readonly DiContainer _container;
+		[Inject] private readonly SignalBus _signalBus;
 
 		private TrainsListItem _selectedItem;
 
@@ -79,6 +83,19 @@ namespace EditorScene.Graph.TrainsList
 
 		public void OnExit()
 		{
+			var trains = new List<TrainModelImpl>(_listContainer.childCount);
+			foreach (Transform child in _listContainer)
+			{
+				var item = child.GetComponent<TrainsListItem>();
+				trains.Add(new TrainModelImpl
+				{
+					Name = item.TrainName,
+					Speed = item.Speed,
+					Mining = item.Mining
+				});
+			}
+
+			_signalBus.TryFire(new TrainsListChangedSignal(trains));
 			gameObject.SetActive(false);
 		}
 

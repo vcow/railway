@@ -84,7 +84,8 @@ namespace EditorScene.Graph
 		public void AddMine()
 		{
 			_isConnection = false;
-			var marker = _container.InstantiatePrefabForComponent<Marker>(_mineMarkerPrefab, _markersLayer);
+			var marker = _container.InstantiatePrefabForComponent<Marker>(_mineMarkerPrefab, _markersLayer,
+				new object[] { _connectionLenMultiplier });
 			marker.gameObject.name = $"mine_{marker.Id}";
 			marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
 		}
@@ -92,7 +93,8 @@ namespace EditorScene.Graph
 		public void AddBase()
 		{
 			_isConnection = false;
-			var marker = _container.InstantiatePrefabForComponent<Marker>(_baseMarkerPrefab, _markersLayer);
+			var marker = _container.InstantiatePrefabForComponent<Marker>(_baseMarkerPrefab, _markersLayer,
+				new object[] { _connectionLenMultiplier });
 			marker.gameObject.name = $"base_{marker.Id}";
 			marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
 		}
@@ -100,7 +102,8 @@ namespace EditorScene.Graph
 		public void AddNode()
 		{
 			_isConnection = false;
-			var marker = _container.InstantiatePrefabForComponent<Marker>(_nodeMarkerPrefab, _markersLayer);
+			var marker = _container.InstantiatePrefabForComponent<Marker>(_nodeMarkerPrefab, _markersLayer,
+				new object[] { _connectionLenMultiplier });
 			marker.gameObject.name = $"node_{marker.Id}";
 			marker.transform.position = new Vector2(Screen.width, Screen.height) * 0.5f;
 		}

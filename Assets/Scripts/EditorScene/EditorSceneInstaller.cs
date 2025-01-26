@@ -1,3 +1,4 @@
+using EditorScene.Builders;
 using EditorScene.Signals;
 using UnityEngine;
 using Zenject;
@@ -9,6 +10,8 @@ namespace EditorScene
 	{
 		public override void InstallBindings()
 		{
+			Container.BindInterfacesAndSelfTo<LevelModelBuilder>().FromNew().AsSingle();
+
 			Container.DeclareSignal<SelectMarkerSignal>();
 			Container.DeclareSignal<DragMarkerSignal>();
 			Container.DeclareSignal<ChangeMarkerMultiplierSignal>();
@@ -20,6 +23,8 @@ namespace EditorScene
 			Container.DeclareSignal<RemoveConnectionSignal>();
 			Container.DeclareSignal<ConnectionChangedSignal>();
 			Container.DeclareSignal<SetConnectionLengthSignal>();
+			Container.DeclareSignal<SetLevelNameSignal>();
+			Container.DeclareSignal<TrainsListChangedSignal>();
 		}
 	}
 }

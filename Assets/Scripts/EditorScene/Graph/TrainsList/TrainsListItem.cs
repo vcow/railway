@@ -31,6 +31,10 @@ namespace EditorScene.Graph.TrainsList
 			}
 		}
 
+		public string TrainName => _name;
+		public float Speed => _characteristics.speed;
+		public float Mining => _characteristics.mining;
+
 		private void Start()
 		{
 			_idLabel.text = (_index + 1).ToString();

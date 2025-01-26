@@ -92,9 +92,8 @@ namespace EditorScene.Graph
 			var toPosition = _connectedMarkers.to.Position;
 			var delta = toPosition - fromPosition;
 			var ang = Mathf.Atan2(delta.y, delta.x);
-			var actualLength = signal.Length / _connectionLenMultiplier;
-			var relToPositionMarker = new Vector2(Mathf.Cos(ang) * actualLength, Mathf.Sin(ang) * actualLength);
-			_signalBus.TryFire(new MoveMarkerSignal(_connectedMarkers.to, _connectedMarkers.from.Position + relToPositionMarker));
+			var relToPositionMarker = new Vector2(Mathf.Cos(ang) * signal.Length, Mathf.Sin(ang) * signal.Length);
+			_signalBus.TryFire(new MoveMarkerSignal(_connectedMarkers.to, fromPosition + relToPositionMarker));
 		}
 
 		public void OnPointerClick(BaseEventData eventData)
@@ -122,11 +121,11 @@ namespace EditorScene.Graph
 			var toPosition = _connectedMarkers.to.Position;
 			var delta = toPosition - fromPosition;
 			var len = delta.magnitude;
-			_line.rectTransform.sizeDelta = new Vector2(len, _line.rectTransform.sizeDelta.y);
+			_line.rectTransform.sizeDelta = new Vector2(len / _connectionLenMultiplier, _line.rectTransform.sizeDelta.y);
 			var ang = Mathf.Atan2(delta.y, delta.x);
 			_line.transform.rotation = Quaternion.Euler(0f, 0f, ang * Mathf.Rad2Deg);
 
-			Length = Mathf.Round(len * _connectionLenMultiplier);
+			Length = Mathf.Round(len);
 			_lengthLabel.text = Length.ToString(CultureInfo.InvariantCulture);
 			_signalBus.TryFire(new ConnectionChangedSignal(this));
 		}
@@ -138,5 +137,9 @@ namespace EditorScene.Graph
 		}
 
 		public float Length { get; private set; }
+
+		public Marker From => _connectedMarkers.from;
+
+		public Marker To => _connectedMarkers.to;
 	}
 }

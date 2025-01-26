@@ -1,0 +1,1 @@
+{"name":"level 1","nodes":[{"type":"Node","id":3,"name":"node_3","x":-85.7992554,"y":80.5278854,"multiplier":1.0},{"type":"Base","id":4,"name":"base_4","x":-65.338295,"y":115.501854,"multiplier":1.0},{"type":"Mine","id":5,"name":"mine_5","x":-129.814133,"y":120.973976,"multiplier":1.0}],"connections":[{"from":4,"to":3},{"from":3,"to":5}],"trains":[]}

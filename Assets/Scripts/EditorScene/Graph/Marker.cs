@@ -17,6 +17,7 @@ namespace EditorScene.Graph
 
 		// ReSharper disable once InconsistentNaming
 		[Inject] protected readonly SignalBus _signalBus;
+		[Inject] private readonly float _connectionLenMultiplier;
 
 		private RectTransform _rectTransform;
 		private bool _markedForConnection;
@@ -71,7 +72,7 @@ namespace EditorScene.Graph
 		{
 			if (signal.Marker == this)
 			{
-				_rectTransform.anchoredPosition = signal.NewPosition;
+				_rectTransform.anchoredPosition = signal.NewPosition / _connectionLenMultiplier;
 			}
 		}
 
@@ -109,7 +110,7 @@ namespace EditorScene.Graph
 
 		public int Id { get; } = _idCtr++;
 
-		public Vector2 Position => _rectTransform.anchoredPosition;
+		public Vector2 Position => _rectTransform.anchoredPosition * _connectionLenMultiplier;
 
 		public string MarkerName { get; private set; }
 	}
