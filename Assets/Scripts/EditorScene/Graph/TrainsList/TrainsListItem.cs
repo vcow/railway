@@ -2,8 +2,8 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using Zenject;
-using Toggle = UnityEngine.UIElements.Toggle;
 
 namespace EditorScene.Graph.TrainsList
 {
@@ -15,11 +15,21 @@ namespace EditorScene.Graph.TrainsList
 		[SerializeField] private TextMeshProUGUI _speedLabel;
 		[SerializeField] private TextMeshProUGUI _miningLabel;
 
-		[Inject] private readonly int _index;
+		[Inject] private int _index;
 		[Inject] private readonly string _name;
 		[Inject] private readonly (float speed, float mining) _characteristics;
 
 		public Toggle Toggle => GetComponent<Toggle>();
+
+		public int Index
+		{
+			get => _index;
+			set
+			{
+				_index = value;
+				_idLabel.text = (_index + 1).ToString();
+			}
+		}
 
 		private void Start()
 		{

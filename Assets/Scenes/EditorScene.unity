@@ -1677,11 +1677,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3704,10 +3704,11 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2125705822}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 2125705826}
+        m_TargetAssemblyTypeName: EditorScene.Graph.TrainsList.TrainsListWindow,
+          Assembly-CSharp
+        m_MethodName: OnExit
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4818,11 +4819,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -255
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6603,11 +6604,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 325
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3984263855055185792, guid: 51439f58fc66a4e3793e902969b19fce, type: 3}
       propertyPath: m_LocalPosition.z

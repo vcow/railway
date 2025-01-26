@@ -3,6 +3,7 @@ using EditorScene.Graph;
 using EditorScene.Signals;
 using TMPro;
 using UnityEngine;
+using Utils;
 using Zenject;
 
 namespace EditorScene
@@ -32,7 +33,7 @@ namespace EditorScene
 
 		public void OnApply()
 		{
-			var newValue = float.Parse(_lengthInput.text);
+			var newValue = _lengthInput.text.ToFloat();
 			if (_selectedConnection == null || _selectedConnection.Length.Equals(newValue))
 			{
 				return;

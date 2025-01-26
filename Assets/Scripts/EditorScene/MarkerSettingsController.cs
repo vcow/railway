@@ -5,6 +5,7 @@ using EditorScene.Signals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Utils;
 using Zenject;
 
 namespace EditorScene
@@ -49,7 +50,7 @@ namespace EditorScene
 
 		private void OnChangeXPosition(string value)
 		{
-			var newValue = float.Parse(value);
+			var newValue = value.ToFloat();
 			if (_selectedMarker == null || _selectedMarker.Position.x.Equals(newValue))
 			{
 				return;
@@ -60,7 +61,7 @@ namespace EditorScene
 
 		private void OnChangeYPosition(string value)
 		{
-			var newValue = float.Parse(value);
+			var newValue = value.ToFloat();
 			if (_selectedMarker == null || _selectedMarker.Position.y.Equals(newValue))
 			{
 				return;
@@ -81,7 +82,7 @@ namespace EditorScene
 
 		private void OnChangeMultiplier(string value)
 		{
-			var newValue = float.Parse(value);
+			var newValue = value.ToFloat();
 			if (_selectedMarker is BaseMarker baseMarker && baseMarker.Multiplier.Equals(newValue) ||
 			    _selectedMarker is MineMarker mineMarker && mineMarker.Multiplier.Equals(newValue))
 			{
