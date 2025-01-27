@@ -6,12 +6,12 @@ using Zenject;
 namespace GameScene.Views
 {
 	[DisallowMultipleComponent]
-	public sealed class MineView : MonoBehaviour
+	public sealed class BaseView : MonoBehaviour
 	{
-		[SerializeField] private MineLabelView _labelPrefab;
+		[SerializeField] private BaseLabelView _labelPrefab;
 
 		[Inject] private readonly DiContainer _container;
-		[Inject] private readonly IMineVertexModel _model;
+		[Inject] private readonly IBaseVertexModel _model;
 		[InjectOptional] private Canvas _labelCanvas;
 
 		private void Start()
@@ -21,7 +21,7 @@ namespace GameScene.Views
 				return;
 			}
 
-			_container.InstantiatePrefabForComponent<MineLabelView>(_labelPrefab, _labelCanvas.transform,
+			_container.InstantiatePrefabForComponent<BaseLabelView>(_labelPrefab, _labelCanvas.transform,
 				new object[] { _model, transform });
 		}
 

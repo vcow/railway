@@ -17,7 +17,7 @@ namespace GameScene.Controllers
 		public GameModelController(ILevelModel levelModel)
 		{
 			_levelModel = levelModel;
-			_gameModel = new GameModelImpl();
+			_gameModel = new GameModelImpl(levelModel);
 			_disposables = new CompositeDisposable(_gameModel);
 		}
 
