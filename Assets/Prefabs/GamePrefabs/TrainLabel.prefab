@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a07a5c62e2546f1a3fb22fa76af94d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _labelOffset: {x: 0, y: 3, z: 0}
+  _labelOffset: {x: 0, y: 1, z: 0}
   _label: {fileID: 5933062847473088151}
   _progress: {fileID: 2860807032268400875}
   _bar: {fileID: 8065290536879392917}

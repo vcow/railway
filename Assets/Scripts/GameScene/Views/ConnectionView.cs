@@ -27,10 +27,12 @@ namespace GameScene.Views
 			_view.size = new Vector2(_distance, _width);
 
 			_length = _model.Length;
+#if UNITY_EDITOR
 			this.ObserveEveryValueChanged(view => view._length)
 				.Skip(1)
 				.Subscribe(f => _signalBus.TryFire(new ConnectionLengthChangedSignal(_model.FromNodeId, _model.ToNodeId, f)))
 				.AddTo(_disposables);
+#endif
 		}
 
 		private void OnDestroy()

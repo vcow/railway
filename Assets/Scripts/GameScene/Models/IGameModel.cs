@@ -8,5 +8,6 @@ namespace GameScene.Models
 		IReadOnlyList<IMineVertexModel> Mines { get; }
 		IReadOnlyList<INodeVertexModel> Nodes { get; }
 		IReadOnlyList<IConnectionEdgeModel> Connections { get; }
+		public IReadOnlyList<ITrainObjectModel> Trains { get; }
 	}
 }

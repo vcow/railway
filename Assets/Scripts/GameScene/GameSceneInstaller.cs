@@ -16,6 +16,8 @@ namespace GameScene
 
 			Container.DeclareSignal<ConnectionLengthChangedSignal>();
 			Container.DeclareSignal<VertexMultiplierChangedSignal>();
+			Container.DeclareSignal<TrainMiningChangedSignal>();
+			Container.DeclareSignal<TrainSpeedChangedSignal>();
 		}
 	}
 }

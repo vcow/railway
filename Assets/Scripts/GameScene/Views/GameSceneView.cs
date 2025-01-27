@@ -27,6 +27,7 @@ namespace GameScene.Views
 		private void Start()
 		{
 			BuildScene();
+			SpawnTrains();
 
 			transform.position = new Vector3(-Bounds.center.x, 0, -Bounds.center.z);
 
@@ -126,6 +127,17 @@ namespace GameScene.Views
 				yMin = Mathf.Min(yMin, position.y);
 				xMax = Mathf.Max(xMax, position.x);
 				yMax = Mathf.Max(yMax, position.y);
+			}
+		}
+
+		private void SpawnTrains()
+		{
+			var root = transform;
+			foreach (var trainModel in _gameModel.Trains)
+			{
+				var view = _container.InstantiatePrefabForComponent<TrainView>(_trainPrefab, root,
+					new object[] { trainModel, _labelsCanvas });
+				view.gameObject.name = $"train_{trainModel.Id}";
 			}
 		}
 	}

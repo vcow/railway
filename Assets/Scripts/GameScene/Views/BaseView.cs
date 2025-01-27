@@ -22,19 +22,19 @@ namespace GameScene.Views
 
 		private void Start()
 		{
-			if (!_labelCanvas)
+			if (_labelCanvas)
 			{
-				return;
+				_container.InstantiatePrefabForComponent<BaseLabelView>(_labelPrefab, _labelCanvas.transform,
+					new object[] { _model, transform });
 			}
 
-			_container.InstantiatePrefabForComponent<BaseLabelView>(_labelPrefab, _labelCanvas.transform,
-				new object[] { _model, transform });
-
 			_multiplier = _model.Multiplier;
+#if UNITY_EDITOR
 			this.ObserveEveryValueChanged(view => view._multiplier)
 				.Skip(1)
 				.Subscribe(f => _signalBus.TryFire(new VertexMultiplierChangedSignal(_model.Id, f)))
 				.AddTo(_disposables);
+#endif
 		}
 
 		private void OnDestroy()
