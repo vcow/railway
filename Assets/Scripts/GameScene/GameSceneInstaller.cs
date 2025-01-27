@@ -1,5 +1,6 @@
 using GameScene.Controllers;
 using GameScene.Models;
+using GameScene.Signals;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,9 @@ namespace GameScene
 		{
 			Container.BindInterfacesAndSelfTo<GameModelController>().FromNew().AsSingle();
 			Container.Bind<IGameModel>().FromResolveGetter<GameModelController>(controller => controller.GameModel).AsSingle();
+
+			Container.DeclareSignal<ConnectionLengthChangedSignal>();
+			Container.DeclareSignal<VertexMultiplierChangedSignal>();
 		}
 	}
 }

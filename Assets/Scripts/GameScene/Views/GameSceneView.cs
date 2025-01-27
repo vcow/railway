@@ -1,6 +1,5 @@
 using System.Linq;
 using GameScene.Models;
-using Models;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -22,7 +21,6 @@ namespace GameScene.Views
 
 		[Inject] private readonly DiContainer _container;
 		[Inject] private readonly IGameModel _gameModel;
-		[Inject] private readonly ILevelModel _levelModel;
 
 		public Bounds Bounds { get; private set; }
 
@@ -107,14 +105,14 @@ namespace GameScene.Views
 
 			var vertices = new[] { _gameModel.Bases.Cast<IGraphVertex>(), _gameModel.Mines, _gameModel.Nodes }
 				.SelectMany(enumerable => enumerable).ToDictionary(vertex => vertex.Id);
-			foreach (var connectionModel in _levelModel.Connections)
+			foreach (var connectionModel in _gameModel.Connections)
 			{
 				var from = vertices[connectionModel.FromNodeId].Position;
 				var to = vertices[connectionModel.ToNodeId].Position;
 				var delta = to - from;
 				var ang = Mathf.Atan2(delta.y, delta.x);
 				var view = _container.InstantiatePrefabForComponent<ConnectionView>(_connectionPrefab, root,
-					new object[] { Quaternion.Euler(-90f, -ang * Mathf.Rad2Deg, 0f), delta.magnitude });
+					new object[] { connectionModel, Quaternion.Euler(-90f, -ang * Mathf.Rad2Deg, 0f), delta.magnitude });
 				view.gameObject.name = $"connection_{connectionModel.FromNodeId}-{connectionModel.ToNodeId}";
 				var position = from + delta * 0.5f;
 				view.transform.position = new Vector3(position.x, 0f, position.y);
