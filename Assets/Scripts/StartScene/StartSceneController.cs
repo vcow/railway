@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Models;
 using Settings;
@@ -25,7 +24,14 @@ namespace StartScene
 
 		public void OnPlay()
 		{
-			throw new NotImplementedException();
+			if (_selectLevelDropdown.value < 0)
+			{
+				return;
+			}
+
+			var level = _levelsProvider.Levels[_selectLevelDropdown.value];
+			_sceneLoader.LoadSceneAsync(Const.GameSceneName,
+				extraBindings: container => container.Bind<ILevelModel>().FromInstance(level).AsSingle());
 		}
 
 		public void OnEditLevel()

@@ -1,3 +1,5 @@
+using GameScene.Controllers;
+using GameScene.Models;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +10,8 @@ namespace GameScene
 	{
 		public override void InstallBindings()
 		{
+			Container.BindInterfacesAndSelfTo<GameModelController>().FromNew().AsSingle();
+			Container.Bind<IGameModel>().FromResolveGetter<GameModelController>(controller => controller.GameModel).AsSingle();
 		}
 	}
 }
