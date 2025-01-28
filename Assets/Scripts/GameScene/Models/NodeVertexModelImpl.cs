@@ -10,12 +10,11 @@ namespace GameScene.Models
 	{
 		private readonly CompositeDisposable _disposables;
 
-		public BoolReactiveProperty IsBusy;
+		public bool IsBusy;
 
 		public int Id { get; }
 		public Vector2 Position { get; }
-
-		IReadOnlyReactiveProperty<bool> IGraphVertex.IsBusy => IsBusy;
+		bool IGraphVertex.IsBusy => IsBusy;
 
 		public NodeVertexModelImpl(INodeModel nodeModel)
 		{
@@ -23,9 +22,8 @@ namespace GameScene.Models
 
 			Id = nodeModel.Id;
 			Position = new Vector2(nodeModel.XPos, nodeModel.YPos);
-			IsBusy = new BoolReactiveProperty(false);
 
-			_disposables = new CompositeDisposable(IsBusy);
+			_disposables = new CompositeDisposable();
 		}
 
 		void IDisposable.Dispose()

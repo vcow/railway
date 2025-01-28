@@ -1,6 +1,8 @@
+using System;
 using GameScene.Models;
 using GameScene.Signals;
 using UniRx;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
@@ -35,6 +37,11 @@ namespace GameScene.Views
 				.Subscribe(f => _signalBus.TryFire(new VertexMultiplierChangedSignal(_model.Id, f)))
 				.AddTo(_disposables);
 #endif
+		}
+
+		private void OnDrawGizmos()
+		{
+			Handles.Label(transform.position, _model.Id.ToString());
 		}
 
 		private void OnDestroy()

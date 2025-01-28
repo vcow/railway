@@ -1,0 +1,242 @@
+{
+  "name": "level 2",
+  "nodes": [
+    {
+      "type": "Node",
+      "id": 3,
+      "name": "node_3",
+      "x": -39.92565,
+      "y": 45.26022,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Node",
+      "id": 4,
+      "name": "node_4",
+      "x": -39.92565,
+      "y": 55.7286263,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Node",
+      "id": 5,
+      "name": "node_5",
+      "x": -48.9665451,
+      "y": 37.171,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Node",
+      "id": 6,
+      "name": "node_6",
+      "x": -30.64684,
+      "y": 38.7174721,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Mine",
+      "id": 7,
+      "name": "mine_7",
+      "x": -48.6096649,
+      "y": 66.67287,
+      "multiplier": 5.0
+    },
+    {
+      "type": "Mine",
+      "id": 8,
+      "name": "mine_8",
+      "x": -31.2416382,
+      "y": 66.31599,
+      "multiplier": 4.0
+    },
+    {
+      "type": "Base",
+      "id": 9,
+      "name": "base_9",
+      "x": -59.672863,
+      "y": 36.5762062,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Base",
+      "id": 10,
+      "name": "base_10",
+      "x": -18.8698864,
+      "y": 38.7174721,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Base",
+      "id": 11,
+      "name": "base_11",
+      "x": -22.43866,
+      "y": 55.4907036,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Mine",
+      "id": 12,
+      "name": "mine_12",
+      "x": -49.32342,
+      "y": 27.6542721,
+      "multiplier": 3.0
+    },
+    {
+      "type": "Mine",
+      "id": 13,
+      "name": "mine_13",
+      "x": -34.57249,
+      "y": 28.8438663,
+      "multiplier": 5.0
+    },
+    {
+      "type": "Base",
+      "id": 14,
+      "name": "base_14",
+      "x": -54.3197021,
+      "y": 53.4683952,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Base",
+      "id": 15,
+      "name": "base_15",
+      "x": -66.09666,
+      "y": 60.84387,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Node",
+      "id": 16,
+      "name": "node_16",
+      "x": -59.4349442,
+      "y": 47.16357,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Base",
+      "id": 17,
+      "name": "base_17",
+      "x": -69.54647,
+      "y": 41.69145,
+      "multiplier": 1.0
+    },
+    {
+      "type": "Mine",
+      "id": 18,
+      "name": "mine_18",
+      "x": -69.07063,
+      "y": 51.68401,
+      "multiplier": 1.0
+    }
+  ],
+  "connections": [
+    {
+      "length": 14.0,
+      "from": 7,
+      "to": 4
+    },
+    {
+      "length": 14.0,
+      "from": 8,
+      "to": 4
+    },
+    {
+      "length": 10.0,
+      "from": 4,
+      "to": 3
+    },
+    {
+      "length": 12.0,
+      "from": 5,
+      "to": 3
+    },
+    {
+      "length": 11.0,
+      "from": 3,
+      "to": 6
+    },
+    {
+      "length": 10.0,
+      "from": 12,
+      "to": 5
+    },
+    {
+      "length": 11.0,
+      "from": 9,
+      "to": 5
+    },
+    {
+      "length": 11.0,
+      "from": 13,
+      "to": 6
+    },
+    {
+      "length": 12.0,
+      "from": 10,
+      "to": 6
+    },
+    {
+      "length": 19.0,
+      "from": 11,
+      "to": 6
+    },
+    {
+      "length": 15.0,
+      "from": 14,
+      "to": 4
+    },
+    {
+      "length": 20.0,
+      "from": 16,
+      "to": 3
+    },
+    {
+      "length": 15.0,
+      "from": 15,
+      "to": 16
+    },
+    {
+      "length": 11.0,
+      "from": 18,
+      "to": 16
+    },
+    {
+      "length": 11.0,
+      "from": 17,
+      "to": 16
+    }
+  ],
+  "trains": [
+    {
+      "name": "train 1",
+      "speed": 7.0,
+      "mining": 1.0
+    },
+    {
+      "name": "train 2",
+      "speed": 8.0,
+      "mining": 2.0
+    },
+    {
+      "name": "train 3",
+      "speed": 8.0,
+      "mining": 1.0
+    },
+    {
+      "name": "train 4",
+      "speed": 15.0,
+      "mining": 1.0
+    },
+    {
+      "name": "train 5",
+      "speed": 15.0,
+      "mining": 1.0
+    },
+    {
+      "name": "train 6",
+      "speed": 7.0,
+      "mining": 3.0
+    }
+  ]
+}

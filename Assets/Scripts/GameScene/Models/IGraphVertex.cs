@@ -1,4 +1,3 @@
-using UniRx;
 using UnityEngine;
 
 namespace GameScene.Models
@@ -7,6 +6,6 @@ namespace GameScene.Models
 	{
 		int Id { get; }
 		Vector2 Position { get; }
-		IReadOnlyReactiveProperty<bool> IsBusy { get; }
+		bool IsBusy { get; }
 	}
 }

@@ -1,4 +1,5 @@
 using GameScene.Models;
+using UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -11,7 +12,7 @@ namespace GameScene.Views
 
 		private void OnDrawGizmos()
 		{
-			Gizmos.DrawSphere(transform.position, 1f);
+			Handles.Label(transform.position, _model.Id.ToString());
 		}
 	}
 }

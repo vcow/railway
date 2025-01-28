@@ -87,7 +87,7 @@ namespace GameScene.Views
 				viewportPoint.y * sizeDelta.y - sizeDelta.y * 0.5f);
 		}
 
-		private void OnValidate()
+		protected virtual void OnValidate()
 		{
 			Assert.IsNotNull(_label, "_label != null");
 			Assert.IsNotNull(_progress, "_progress != null");

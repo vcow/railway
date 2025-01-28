@@ -13,13 +13,15 @@ namespace GameScene.Models
 		private readonly CompositeDisposable _disposables;
 		private readonly SignalBus _signalBus;
 
-		public BoolReactiveProperty IsBusy;
+		public bool IsBusy;
+		public readonly FloatReactiveProperty Resources;
 
 		public int Id { get; }
 		public Vector2 Position { get; }
 		public string Name { get; }
 		public float Multiplier { get; private set; }
-		IReadOnlyReactiveProperty<bool> IGraphVertex.IsBusy => IsBusy;
+		bool IGraphVertex.IsBusy => IsBusy;
+		IReadOnlyReactiveProperty<float> IBaseVertexModel.Resources => Resources;
 
 		public BaseVertexModelImpl(INodeModel nodeModel, SignalBus signalBus)
 		{
@@ -29,9 +31,9 @@ namespace GameScene.Models
 			Position = new Vector2(nodeModel.XPos, nodeModel.YPos);
 			Name = nodeModel.Name;
 			Multiplier = nodeModel.Multiplier;
-			IsBusy = new BoolReactiveProperty(false);
+			Resources = new FloatReactiveProperty(0f);
 
-			_disposables = new CompositeDisposable(IsBusy);
+			_disposables = new CompositeDisposable(Resources);
 
 			_signalBus = signalBus;
 			_signalBus.Subscribe<VertexMultiplierChangedSignal>(OnVertexMultiplierChanged);

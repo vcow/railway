@@ -10,6 +10,8 @@ namespace GameScene.Views
 	[DisallowMultipleComponent]
 	public sealed class TrainView : MonoBehaviour
 	{
+		private const float OffsetToValidateRotation = 0.01f;
+
 		private readonly CompositeDisposable _disposables = new();
 
 		[SerializeField] private TrainLabelView _labelPrefab;
@@ -20,6 +22,8 @@ namespace GameScene.Views
 		[Inject] private readonly ITrainObjectModel _model;
 		[Inject] private readonly SignalBus _signalBus;
 		[InjectOptional] private Canvas _labelCanvas;
+
+		private Vector3 _lastRotatePosition;
 
 		private void Start()
 		{
@@ -32,6 +36,7 @@ namespace GameScene.Views
 			_speed = _model.Speed;
 			_mining = _model.Mining;
 
+			_lastRotatePosition = transform.position;
 			_model.Position.Subscribe(OnPositionChanged).AddTo(_disposables);
 
 #if UNITY_EDITOR
@@ -48,7 +53,16 @@ namespace GameScene.Views
 
 		private void OnPositionChanged(Vector2 newPosition)
 		{
-			transform.localPosition = new Vector3(newPosition.x, 0f, newPosition.y);
+			var position = new Vector3(newPosition.x, 0f, newPosition.y);
+			transform.localPosition = position;
+
+			var deltaPosition = position - _lastRotatePosition;
+			if (deltaPosition.sqrMagnitude > OffsetToValidateRotation * OffsetToValidateRotation)
+			{
+				var ang = Mathf.Atan2(deltaPosition.x, deltaPosition.z);
+				transform.rotation = Quaternion.Euler(0f, ang * Mathf.Rad2Deg + 90f, 0f);
+				_lastRotatePosition = position;
+			}
 		}
 
 		private void OnDestroy()

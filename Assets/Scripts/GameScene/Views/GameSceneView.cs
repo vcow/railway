@@ -30,6 +30,7 @@ namespace GameScene.Views
 			SpawnTrains();
 
 			transform.position = new Vector3(-Bounds.center.x, 0, -Bounds.center.z);
+			_cinemachineTargetGroup.DoUpdate();
 
 			if (_ground)
 			{
@@ -96,16 +97,14 @@ namespace GameScene.Views
 				}
 			}
 
-			_cinemachineTargetGroup.DoUpdate();
-
 			Bounds = new Bounds
 			{
 				min = new Vector3(xMin * _distanceAspect - 1f, 0f, yMin * _distanceAspect - 1f),
 				max = new Vector3(xMax * _distanceAspect + 1f, 2f, yMax * _distanceAspect + 1)
 			};
 
-			var vertices = new[] { _gameModel.Bases.Cast<IGraphVertex>(), _gameModel.Mines, _gameModel.Nodes }
-				.SelectMany(enumerable => enumerable).ToDictionary(vertex => vertex.Id);
+			var vertices = _gameModel.GetAllVertices()
+				.SelectMany(vertices => vertices).ToDictionary(vertex => vertex.Id);
 			foreach (var connectionModel in _gameModel.Connections)
 			{
 				var from = vertices[connectionModel.FromNodeId].Position;

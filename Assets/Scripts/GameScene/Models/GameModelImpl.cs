@@ -58,10 +58,12 @@ namespace GameScene.Models
 					break;
 				}
 
-				var randomBase = freeBases[Random.Range(0, freeBases.Count)];
+				var randomBase = (BaseVertexModelImpl)freeBases[Random.Range(0, freeBases.Count)];
 				freeBases.Remove(randomBase);
 
-				trains.Add(new TrainObjectModelImpl(trainId++, trainModel, randomBase.Position, signalBus).AddTo(_disposables));
+				var train = new TrainObjectModelImpl(trainId++, trainModel, randomBase, signalBus).AddTo(_disposables);
+				trains.Add(train);
+				randomBase.IsBusy = true;
 			}
 
 			Bases = bases;
